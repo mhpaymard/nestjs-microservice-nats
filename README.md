@@ -7,6 +7,7 @@ Scaffold quickly your next [NestJS 8](https://nestjs.com/) API project with
 - Docker (docker-compose)
 - JWT
 - Swagger
+- Authentication - OTP
 
 ## 1. Getting started
 
