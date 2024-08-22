@@ -1,0 +1,49 @@
+services:
+  nats:
+    image: nats
+    env_file:
+      - ./.env
+    ports:
+      - $NATS_LOCAL_PORT:$NATS_DOCKER_PORT
+  postgresql:
+    image: postgres:14-alpine
+    restart: unless-stopped
+    env_file:
+      - ./.env
+    environment:
+      - POSTGRESDB_HOST=$DB_HOST
+      - POSTGRESDB_USER=$DB_USERNAME
+      - POSTGRESDB_ROOT_PASSWORD=$DB_PASSWORD
+      - POSTGRESDB_DATABASE=$DB_NAME
+      - POSTGRES_USER=$DB_USERNAME
+      - POSTGRES_PASSWORD=$DB_PASSWORD
+      - POSTGRES_DB=$DB_NAME
+    ports:
+      - $POSTGRESDB_LOCAL_PORT:$POSTGRESDB_DOCKER_PORT
+    volumes:
+      - ./postgres-data:/var/lib/postgresql/data
+  gateway:
+    build:
+      context: .
+      dockerfile: ./apps/gateway/Dockerfile
+    env_file:
+      - ./.env
+    command: npm run start:dev gateway
+    ports:
+      - $NODE_LOCAL_PORT:$NODE_DOCKER_PORT
+    depends_on:
+      - nats
+    volumes:
+      - .:/usr/src/app
+      - /usr/src/app/node_modules
+  user-microservice:
+    build:
+      context: .
+      dockerfile: ./apps/user/Dockerfile
+    command: npm run start:dev user
+    depends_on:
+      - nats
+      - postgresql
+    volumes:
+      - .:/usr/src/app
+      - /usr/src/app/node_modules
