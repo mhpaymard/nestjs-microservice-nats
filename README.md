@@ -33,11 +33,9 @@ You can now configure your project by creating a new `.env` file containing your
 nano .env
 ```
 
-## 1.3. Default NPM commands (We recommended to use docker)
+## 1.3. Default Docker commands
 
-The NPM commands below are already included with this template and can be used to quickly run, build and test your project.
-Go to the `auth-service` folder and run the bellow commands. Same way you can run the `email-service` microservice.
-
+The Docker commands below are already included with this template and can be used to quickly run, build and test your project.
 ```sh
 
 # Internal command used during the Docker build stage
